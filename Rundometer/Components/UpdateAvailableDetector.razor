@@ -1,0 +1,44 @@
+﻿@inject IJSRuntime jsRuntime
+@inject NavigationManager uriHelper;
+
+@if (this.newVersionAvailable)
+{
+    @*having this 'div' around is very important to make css isolation work*@
+    <div>
+        <MudButton Class="floating-update-button" OnClick="this.ReloadPage" Variant="Variant.Filled" Color="Color.Warning">A new version of the application is available. Click here to reload.</MudButton>
+    </div>
+}
+
+@code {
+
+    private bool newVersionAvailable = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await this.RegisterForUpdateAvailableNotification();
+    }
+
+    private async Task RegisterForUpdateAvailableNotification()
+    {
+        await this.jsRuntime.InvokeAsync<object>(
+            identifier: "registerForUpdateAvailableNotification",
+            DotNetObjectReference.Create(this),
+            nameof(this.OnUpdateAvailable));
+    }
+
+    [JSInvokable(nameof(OnUpdateAvailable))]
+    public Task OnUpdateAvailable()
+    {
+        this.newVersionAvailable = true;
+
+        StateHasChanged();
+
+        return Task.CompletedTask;
+    }
+
+    private void ReloadPage()
+    {
+        this.uriHelper.NavigateTo(uriHelper.Uri, true);
+    }
+
+}

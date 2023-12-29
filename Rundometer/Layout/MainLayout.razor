@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+
+<UpdateAvailableDetector/>
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<PageTitle>Rundometer</PageTitle>
+
+<MudAppBar Color="Color.Primary" Fixed="true" Dense="true">
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Inherit" Style="color: white !important;" Variant="Variant.Text" OnClick="this.OpenInfoDialog" Edge="Edge.End"/>
+</MudAppBar>
+
+<div style="padding-top: 64px;">
+    @this.Body;
+</div>
+
+@code
+{
+    [Inject]
+    public IDialogService DialogService { get; set; } = null!;
+
+    private void OpenInfoDialog()
+    {
+        var options = new DialogOptions
+            {
+                NoHeader = true,
+                FullWidth = true,
+                MaxWidth = MaxWidth.ExtraLarge,
+            };
+
+        this.DialogService.Show<InfoDialog>("Info", options);
+    }
+}
