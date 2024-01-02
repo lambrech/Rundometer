@@ -6,7 +6,7 @@ on:
       - master
       
 env:
-  project_path: './Rundometer/'
+  project_path: './DigitalerKassenBonPwa/'
  
 
 jobs:
@@ -23,14 +23,14 @@ jobs:
           dotnet-version: 8.0.100
       
       - name: Substitute base href
-        run: sed -i 's/base href="\/"/base href="\/${{ github.event.repository.name }}\/"/' $project_path/wwwroot/index.html
+        run: sed -i 's/base href="\/"/base href="\/${{ github.event.repository.name }}\/"/' ${{ project_path }}/wwwroot/index.html
         shell: bash
         
       - name: Setup SPA 404 page redirection
         run: |
-          cp $project_path/AdditionalDeployFiles/404.html $project_path/wwwroot
-          cp $project_path/AdditionalDeployFiles/redirect.js $project_path/wwwroot
-          sed -i '/blazor.webassembly.js/i \    <script src="redirect.js"><\/script>' $project_path/wwwroot/index.html
+          cp ${{ project_path }/AdditionalDeployFiles/404.html ${{ project_path }}/wwwroot
+          cp ${{ project_path }/AdditionalDeployFiles/redirect.js ${{ project_path }}/wwwroot
+          sed -i '/blazor.webassembly.js/i \    <script src="redirect.js"><\/script>' ${{ project_path }}/wwwroot/index.html
         shell: bash
         
       - name: Publish application
