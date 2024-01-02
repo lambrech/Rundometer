@@ -28,8 +28,8 @@ jobs:
         
       - name: Setup SPA 404 page redirection
         run: |
-          cp ${{ env.project_path }/AdditionalDeployFiles/404.html ${{ env.project_path }}/wwwroot
-          cp ${{ env.project_path }/AdditionalDeployFiles/redirect.js ${{ env.project_path }}/wwwroot
+          cp ${{ env.project_path }}/AdditionalDeployFiles/404.html ${{ env.project_path }}/wwwroot
+          cp ${{ env.project_path }}/AdditionalDeployFiles/redirect.js ${{ env.project_path }}/wwwroot
           sed -i '/blazor.webassembly.js/i \    <script src="redirect.js"><\/script>' ${{ env.project_path }}/wwwroot/index.html
         shell: bash
         
