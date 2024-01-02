@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-		<Version>0.1.0-preAlpha.5</Version>
+		<Version>0.1.0-preAlpha.6</Version>
 		<PublishTrimmed>true</PublishTrimmed>
 		<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
