@@ -6,7 +6,7 @@ on:
       - master
       
 env:
-  project_path: './DigitalerKassenBonPwa/'
+  project_path: './Rundometer/'
  
 
 jobs:
