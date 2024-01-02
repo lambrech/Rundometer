@@ -1,56 +1,24 @@
-name: github pages publish workflow
+name: github pages
 
 on:
   push:
     branches:
       - master
       
-env:
-  project_path: './DigitalerKassenBonPwa/'
- 
-
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       # Checkout the code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       
       # Install .NET Core SDK
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 8.0.100
       
-      - name: Substitute base href
-        run: sed -i 's/base href="\/"/base href="\/${{ github.event.repository.name }}\/"/' ${{ project_path }}/wwwroot/index.html
-        shell: bash
-        
-      - name: Setup SPA 404 page redirection
-        run: |
-          cp ${{ project_path }/AdditionalDeployFiles/404.html ${{ project_path }}/wwwroot
-          cp ${{ project_path }/AdditionalDeployFiles/redirect.js ${{ project_path }}/wwwroot
-          sed -i '/blazor.webassembly.js/i \    <script src="redirect.js"><\/script>' ${{ project_path }}/wwwroot/index.html
-        shell: bash
-        
-      - name: Publish application
-        run: dotnet publish -c Release -o ${{ runner.temp }}/${{ github.action }}
-        shell: bash
-        
-      - name: Create gh-pages branch
-        run: |
-          git checkout --orphan gh-pages
-          git clean -fdx
-          git rm -rf .
-          cp -r ${{ runner.temp }}/${{ github.action }}/wwwroot/. .
-          touch .nojekyll
-        shell: bash
-        
-      - name: Commit and push
-        run: |
-          git add .
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit -m 'Deploy application to GitHub Pages'
-          git push -f -u origin gh-pages
-        shell: bash
+      - uses: proulxsamuel/deploy-blazor-to-gh-pages@master
+        with:
+          project_path: './Rundometer/'
