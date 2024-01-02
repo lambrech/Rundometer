@@ -1,6 +1,10 @@
 ﻿@page "/info"
 @inject NavigationManager Navigation
 
+<button class="btn btn-primary" @onclick="@(() => {Navigation.NavigateTo($"{Navigation.BaseUri}/");} )">
+    Home
+</button>
+
 <NavLink href="" Match="NavLinkMatch.All">HOME</NavLink>
 
 <div class="d-flex flex-column">
