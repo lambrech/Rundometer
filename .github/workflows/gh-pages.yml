@@ -1,13 +1,14 @@
 name: github pages publish workflow
 
-
-
 on:
   push:
     branches:
       - master
       
-  
+env:
+  project_path: './DigitalerKassenBonPwa/'
+ 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
