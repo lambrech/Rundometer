@@ -7,7 +7,7 @@
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 		<Version>0.1.0-preAlpha.5</Version>
 		<PublishTrimmed>true</PublishTrimmed>
-		<RunAOTCompilation>true</RunAOTCompilation>
+		<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
 
 	<Target Name="GetGitInfo" Condition="'$(Configuration)' == 'Release' ">
