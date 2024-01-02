@@ -1,9 +1,7 @@
 ﻿@page "/info"
 @inject NavigationManager Navigation
 
-<button class="btn btn-primary" @onclick="@(() => {Navigation.NavigateTo("/");} )">
-    Home
-</button>
+<NavLink href="" Match="NavLinkMatch.All">HOME</NavLink>
 
 <div class="d-flex flex-column">
     <MudText Class="mb-2" Typo="Typo.h5" Style="text-align: center; font-weight: bold;">Info</MudText>

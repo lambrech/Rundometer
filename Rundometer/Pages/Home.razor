@@ -1,9 +1,7 @@
 ﻿@page "/"
 @inject NavigationManager Navigation
 
-<button class="btn btn-primary" @onclick="@(() => {Navigation.NavigateTo("/info");} )">
-    INFO
-</button>
+<NavLink href="info" Match="NavLinkMatch.All">INFO</NavLink>
 
 
 
