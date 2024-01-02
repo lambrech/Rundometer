@@ -6,13 +6,13 @@ on:
       - master
       
 env:
-  project_path: './Rundometer/'
-  output_path: ${{ runner.temp }}/${{ github.action }}
- 
+  project_path: './Rundometer/' 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      output_path: ${{ runner.temp }}/${{ github.action }}
     steps:
       # Checkout the code
       - uses: actions/checkout@v4
