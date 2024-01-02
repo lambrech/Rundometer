@@ -7,6 +7,7 @@ on:
       
 env:
   project_path: './Rundometer/'
+  output_path: ${{ runner.temp }}/${{ github.action }}
  
 
 jobs:
@@ -21,6 +22,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.100
+
+      - name: Setup wasm worload
+        run: dotnet workload install wasm-tools
+        shell: bash
       
       - name: Substitute base href
         run: sed -i 's/base href="\/"/base href="\/${{ github.event.repository.name }}\/"/' ${{ env.project_path }}wwwroot/index.html
@@ -34,7 +39,7 @@ jobs:
         shell: bash
         
       - name: Publish application
-        run: dotnet publish ${{ env.project_path}} -c Release -o ${{ runner.temp }}/${{ github.action }}
+        run: dotnet publish ${{ env.project_path}} -c Release -o ${{ env.output_path }}
         shell: bash
         
       - name: Create gh-pages branch
@@ -42,7 +47,7 @@ jobs:
           git checkout --orphan gh-pages
           git clean -fdx
           git rm -rf .
-          cp -r ${{ runner.temp }}/${{ github.action }}/wwwroot/. .
+          cp -r ${{ env.output_path }}/wwwroot/. .
           touch .nojekyll
         shell: bash
         
