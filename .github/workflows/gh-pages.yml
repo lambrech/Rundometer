@@ -6,13 +6,12 @@ on:
       - master
       
 env:
-  project_path: './Rundometer/' 
+  project_path: './Rundometer/'
+ 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      output_path: ${{ runner.temp }}/${{ github.action }}
     steps:
       # Checkout the code
       - uses: actions/checkout@v4
@@ -39,7 +38,7 @@ jobs:
         shell: bash
         
       - name: Publish application
-        run: dotnet publish ${{ env.project_path}} -c Release -o ${{ env.output_path }}
+        run: dotnet publish ${{ env.project_path}} -c Release -o ${{ runner.temp }}/${{ env.project_path }}
         shell: bash
         
       - name: Create gh-pages branch
@@ -47,7 +46,7 @@ jobs:
           git checkout --orphan gh-pages
           git clean -fdx
           git rm -rf .
-          cp -r ${{ env.output_path }}/wwwroot/. .
+          cp -r ${{ runner.temp }}/${{ env.project_path }}wwwroot/. .
           touch .nojekyll
         shell: bash
         
