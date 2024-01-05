@@ -1,0 +1,18 @@
+/* /Components/UpdateAvailableDetector.razor.rz.scp.css */
+[b-syzqh7drh6] .floating-update-button {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    padding: 1rem 1.5rem;
+    animation: fadein-b-syzqh7drh6 2s ease-out;
+}
+
+@keyframes fadein-b-syzqh7drh6 {
+    from {
+        right: -100%;
+    }
+
+    to {
+        right: 2rem;
+    }
+}
