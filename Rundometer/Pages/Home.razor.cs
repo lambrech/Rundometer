@@ -12,9 +12,11 @@ public partial class Home
 
     public string OutputInfoText { get; set; }
 
-    public Stopwatch? Stopwatch { get; set; } = null;
+    public Stopwatch? Stopwatch { get; set; }
 
     public HashSet<(decimal, TimeSpan)> OutputCalculation { get; set; } = new();
+
+    public List<(int Lap, TimeSpan Time)> Laps { get; set; } = new();
 
     public string InputDistance
     {
@@ -126,13 +128,13 @@ public partial class Home
 
     private void OnStartLapClick()
     {
-        if (this.Stopwatch is { IsRunning: true})
+        if (this.Stopwatch is { IsRunning: true })
         {
-            this.Laps.Add((this.Laps.Count + 1 , this.Stopwatch.Elapsed));
+            this.Laps.Add((this.Laps.Count + 1, this.Stopwatch.Elapsed));
         }
         else
         {
-            this.Laps = new();
+            this.Laps = new List<(int Lap, TimeSpan Time)>();
             this.Stopwatch = Stopwatch.StartNew();
 
             Task.Run(
@@ -159,6 +161,4 @@ public partial class Home
 
         this.Stopwatch.Stop();
     }
-
-    public List<(int Lap, TimeSpan Time)> Laps { get; set; } = new();
 }
