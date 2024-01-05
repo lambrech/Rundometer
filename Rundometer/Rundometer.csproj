@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-		<Version>0.1.0-preAlpha.6</Version>
+		<Version>0.1.0-preRelease.1</Version>
 		<PublishTrimmed>true</PublishTrimmed>
 		<RunAOTCompilation>true</RunAOTCompilation>
 	</PropertyGroup>
@@ -37,5 +37,9 @@
 	<ItemGroup>
 		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 	</ItemGroup>
+
+	<Target Name="CollectMudBlazorStaticAssets" DependsOnTargets="ResolveStaticWebAssetsInputs" AfterTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
+		<Copy SourceFiles="%(StaticWebAsset.Identity)" DestinationFolder="wwwroot/temp" Condition="$([System.String]::Copy(%(StaticWebAsset.Identity)).Contains('mudblazor'))" />
+	</Target>
 
 </Project>

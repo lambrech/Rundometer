@@ -10,11 +10,13 @@
 
 <MudAppBar Color="Color.Primary" Fixed="true" Dense="true">
     <MudSpacer />
+    <MudText Typo="Typo.h6">Rundometer</MudText>
+    <MudSpacer/>
     <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Inherit" Style="color: white !important;" Variant="Variant.Text" OnClick="this.OpenInfoDialog" Edge="Edge.End"/>
 </MudAppBar>
 
 <div style="padding-top: 64px;">
-    @this.Body;
+    @this.Body
 </div>
 
 @code
