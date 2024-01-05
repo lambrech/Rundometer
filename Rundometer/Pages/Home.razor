@@ -7,20 +7,40 @@
 </style>
 
 <div class="ma-8">
-    <div class="d-flex flex-column">
-        <MudAutocomplete Class="ma-2 my-align-center" T="string" Label="Distanz in Meter" @bind-Value="this.InputDistance" SearchFunc="@(this.DistanceSearch)"
-                         Margin="Margin.Dense" Dense="true" Variant="Variant.Outlined" CoerceValue="true" CoerceText="true"/>
-        <div class="d-flex flex-row">
-            <MudTextField Class="ma-2 my-align-center" Immediate="true" @bind-Value="this.InputTimeMinutes" Label="Minuten" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
-            <MudTextField Class="ma-2 my-align-center" Immediate="true" @bind-Value="this.InputTimeSeconds" Label="Sekunden" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
-        </div>
-        <div class="d-flex flex-column align-center mt-8">
-            <p>@this.OutputInfoText</p>
-
-            @foreach (var item in this.OutputCalculation)
-            {
-                <MudText Class="ma-1" Typo="Typo.body1">@($"{item.Item1} m:") &emsp; @($"{item.Item2.Minutes}m:{item.Item2.Seconds.ToString("D2")}s")</MudText>
-            }
+    <div class="d-flex flex-column align-center">
+        <div class="d-flex flex-column align-center" style="width: fit-content">
+            <div style="width: 100%">
+                <MudAutocomplete Class="ma-2 my-align-center" T="string" Label="Distanz in Meter" @bind-Value="this.InputDistance" SearchFunc="@(this.DistanceSearch)"
+                                 Margin="Margin.Dense" Dense="true" Variant="Variant.Outlined" CoerceValue="true" CoerceText="true"/>
+            </div>
+            <div class="d-flex flex-row">
+                <MudTextField Class="ma-2 my-align-center" Immediate="true" @bind-Value="this.InputTimeMinutes" Label="Minuten" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+                <MudTextField Class="ma-2 my-align-center" Immediate="true" @bind-Value="this.InputTimeSeconds" Label="Sekunden" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+            </div>
+            <div class="d-flex flex-column align-center mt-8">
+                <MudText Typo="Typo.subtitle2" Color="Color.Error">@this.OutputInfoText</MudText>
+                
+                @if (this.OutputCalculation.Count > 0)
+                {
+                    <MudSimpleTable Elevation="0" Hover="true" Dense="true" FixedHeader="true">
+                        <thead>
+                        <tr>
+                            <th><MudText Class="mud-typography-align-right" Typo="Typo.subtitle2">Distanz</MudText></th>
+                            <th><MudText Class="mud-typography-align-left" Typo="Typo.subtitle2">Zeit</MudText></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in this.OutputCalculation)
+                        {
+                            <tr>
+                                <td><MudText Class="mud-typography-align-right" Typo="Typo.body1">@($"{item.Item1} m:")</MudText></td>
+                                <td><MudText Class="mud-typography-align-left" Typo="Typo.body1">@($"{(item.Item2.Hours > 0 ? $"{item.Item2.Hours}h:" : "")}{item.Item2.Minutes}m:{item.Item2.Seconds.ToString("D2")}s")</MudText></td>
+                            </tr>
+                        }
+                        </tbody>
+                    </MudSimpleTable>
+                }
+            </div>
         </div>
     </div>
 </div>
