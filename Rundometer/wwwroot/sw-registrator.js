@@ -11,8 +11,10 @@ window.updateAvailable = new Promise((resolve, reject) => {
             console.info(`Service worker registration successful (scope: ${registration.scope})`);
 
             registration.onupdatefound = () => {
+                console.log("registration.onupdatefound is called");
                 const installingServiceWorker = registration.installing;
                 installingServiceWorker.onstatechange = () => {
+                    console.log("installingServiceWorker.onstatechange is called. State: " + installingServiceWorker.state + ". FinalBoolCheck: " + !!navigator.serviceWorker.controller);
                     if (installingServiceWorker.state === 'installed') {
                         resolve(!!navigator.serviceWorker.controller);
                     }
