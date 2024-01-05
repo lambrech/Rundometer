@@ -29,6 +29,10 @@ jobs:
       - name: Substitute base href
         run: sed -i 's/base href="\/"/base href="\/${{ github.event.repository.name }}\/"/' ${{ env.project_path }}wwwroot/index.html
         shell: bash
+
+      - name: Substitute base href service worker
+        run: sed -i 's/const base = "\/"/const base = "\/${{ github.event.repository.name }}\/"/' ${{ env.project_path }}wwwroot/service-worker.published.js
+        shell: bash
         
       - name: Setup SPA 404 page redirection
         run: |

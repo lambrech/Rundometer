@@ -6,7 +6,7 @@ window.updateAvailable = new Promise((resolve, reject) => {
         return;
     }
 
-    navigator.serviceWorker.register('./service-worker.js')
+    navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' })
         .then(registration => {
             console.info(`Service worker registration successful (scope: ${registration.scope})`);
 
@@ -20,9 +20,9 @@ window.updateAvailable = new Promise((resolve, reject) => {
             };
 
             setInterval(() => {
-                //console.log("test");
+                console.log("registration.update() is called");
                 registration.update();
-            }, 5 * 1000); // 60000ms -> check each minute
+            }, 30 * 1000); // 60000ms -> check each minute
         })
         .catch(error => {
             console.error('Service worker registration failed with error:', error);

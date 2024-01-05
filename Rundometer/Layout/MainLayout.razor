@@ -2,7 +2,7 @@
 
 <UpdateAvailableDetector/>
 
-<MudThemeProvider/>
+<MudThemeProvider Theme="@this.Theme"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -34,5 +34,18 @@
             };
 
         this.DialogService.Show<InfoDialog>("Info", options);
+    }
+
+    public MudTheme Theme { get; } = new TmpTheme();
+
+    public class TmpTheme : MudTheme
+    {
+        public TmpTheme()
+        {
+            this.Palette = new Palette()
+            {
+                Primary = "#ad3d31",
+            };
+        }
     }
 }
