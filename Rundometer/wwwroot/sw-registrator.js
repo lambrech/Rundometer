@@ -34,6 +34,7 @@ window.updateAvailable = new Promise((resolve, reject) => {
 
 window.registerForUpdateAvailableNotification = (caller, methodName) => {
     window.updateAvailable.then(isUpdateAvailable => {
+        console.log("window.updateAvailable then is called with: " + isUpdateAvailable);
         if (isUpdateAvailable) {
             caller.invokeMethodAsync(methodName).then();
         }

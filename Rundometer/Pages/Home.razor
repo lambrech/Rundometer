@@ -4,6 +4,15 @@
     .my-align-center input {
         text-align: center;
     }
+
+    div.sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        background-color: #666;
+        padding: 40px;
+        font-size: 25px;
+    }
 </style>
 
 <div class="ma-8">
@@ -17,9 +26,51 @@
                 <MudTextField Class="ma-2 my-align-center" Immediate="true" @bind-Value="this.InputTimeMinutes" Label="Minuten" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
                 <MudTextField Class="ma-2 my-align-center" Immediate="true" @bind-Value="this.InputTimeSeconds" Label="Sekunden" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
             </div>
-            <div class="d-flex flex-column align-center mt-8">
+            <div class="d-flex flex-column align-center mt-4">
                 <MudText Typo="Typo.subtitle2" Color="Color.Error">@this.OutputInfoText</MudText>
                 
+                <div class="d-flex flex-column align-center">
+                    <div class="d-flex flex-row">
+                        <MudButton Class="ma-2" OnClick="@this.OnStartLapClick" Color="Color.Primary" Variant="Variant.Filled">@(this.Stopwatch is { IsRunning: true } ? "Runde" : "Start")</MudButton>
+                        <MudButton Class="ma-2" OnClick="@this.OnStopClick" Color="Color.Primary" Variant="Variant.Filled" Disabled="@(!(this.Stopwatch is { IsRunning: true}))">Stop</MudButton>
+                    </div>
+                    @if (this.Stopwatch != null)
+                    {
+                        @if (this.Stopwatch.Elapsed.Hours > 0)
+                        {
+                            <MudText Typo="Typo.h6">@this.Stopwatch.Elapsed.ToString(@"HH\:mm\:ss\.fff")</MudText>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.h6">@this.Stopwatch.Elapsed.ToString(@"mm\:ss\.fff")</MudText>
+                        }
+
+                        @if (this.Laps.Count > 0)
+                        {
+                            <MudSimpleTable Elevation="0" Hover="true" Dense="true" FixedHeader="true">
+                                <tbody>
+                                @foreach (var lap in this.Laps)
+                                {
+                                    <tr>
+                                            <td style="padding: 1px 10px;"><MudText Class="mud-typography-align-right" Typo="Typo.body2">@($"{lap.Lap}:")</MudText></td>
+                                            <td style="padding: 1px 10px;">
+                                            @if (lap.Time.Hours > 0)
+                                            {
+                                                    <MudText Class="mud-typography-align-left" Typo="Typo.body2">@lap.Time.ToString(@"HH\:mm\:ss\.fff")</MudText>
+                                            }
+                                            else
+                                            {
+                                                    <MudText Class="mud-typography-align-left" Typo="Typo.body2">@lap.Time.ToString(@"mm\:ss\.fff")</MudText>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </MudSimpleTable>
+                        }
+                    }
+                </div>
+
                 @if (this.OutputCalculation.Count > 0)
                 {
                     <MudSimpleTable Elevation="0" Hover="true" Dense="true" FixedHeader="true">
@@ -44,124 +95,3 @@
         </div>
     </div>
 </div>
-
-@code
-{
-    protected override Task OnInitializedAsync()
-    {
-        this.UpdateOutput();
-        return Task.CompletedTask;
-    }
-
-    private string inputDistance = "1000";
-
-    public string InputDistance
-    {
-        get => this.inputDistance;
-
-        set
-        {
-            if (this.inputDistance == value)
-            {
-                return;
-            }
-
-            this.inputDistance = value;
-            this.UpdateOutput();
-        }
-    }
-
-    private string inputTimeMinutes = "4";
-
-    public string InputTimeMinutes
-    {
-        get => this.inputTimeMinutes;
-
-        set
-        {
-            if (this.inputTimeMinutes == value)
-            {
-                return;
-            }
-
-            this.inputTimeMinutes = value;
-            this.UpdateOutput();
-        }
-    }
-
-    private string inputTimeSeconds = "0";
-
-    public string InputTimeSeconds
-    {
-        get => this.inputTimeSeconds;
-
-        set
-        {
-            if (this.inputTimeSeconds == value)
-            {
-                return;
-            }
-
-            this.inputTimeSeconds = value;
-            this.UpdateOutput();
-        }
-    }
-
-    public string OutputInfoText { get; set; }
-
-    public HashSet<(decimal, TimeSpan)> OutputCalculation { get; set; } = new();
-
-    private async Task<IEnumerable<string>> DistanceSearch(string arg)
-    {
-        await Task.Delay(0);
-        var all = new[] { "1500", "1000", "800", arg }.ToHashSet();
-    // return all.Where(x => x.ToLowerInvariant().Contains(arg)).ToList();
-        return all;
-    }
-
-    public void UpdateOutput()
-    {
-        this.OutputInfoText = string.Empty;
-        this.OutputCalculation = new();
-
-        if (!decimal.TryParse(this.InputDistance, out var distance) || distance < 100)
-        {
-            this.OutputInfoText = "Fehlerhafte Zahleneingabe im 'Distanz'-Feld";
-            return;
-        }
-
-        if (!decimal.TryParse(this.InputTimeMinutes, out var minutes) || minutes < 0)
-        {
-            this.OutputInfoText = "Fehlerhafte Zahleneingabe im 'Minuten'-Feld";
-            return;
-        }
-
-        if (!decimal.TryParse(this.InputTimeSeconds, out var seconds) || seconds < 0)
-        {
-            this.OutputInfoText = "Fehlerhafte Zahleneingabe im 'Sekunden'-Feld";
-            return;
-        }
-
-        var time = TimeSpan.FromMinutes((double)minutes).Add(TimeSpan.FromSeconds((double)seconds));
-
-        if (time.TotalSeconds <= 0)
-        {
-            this.OutputInfoText = "Gesamtzeit muss größer als 0 sein";
-            return;
-        }
-
-        var distanceParts = new HashSet<(decimal, TimeSpan)>();
-        var secondsPerMeter = (decimal)time.TotalSeconds / distance;
-        decimal tmp = 100;
-
-        while (tmp <= distance)
-        {
-            distanceParts.Add((tmp, TimeSpan.FromSeconds((double)(tmp * secondsPerMeter))));
-            tmp += 100;
-        }
-
-        distanceParts.Add((distance, time));
-
-        this.OutputCalculation = distanceParts;
-    }
-}
