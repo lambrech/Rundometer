@@ -161,4 +161,16 @@ public partial class Home
 
         this.Stopwatch.Stop();
     }
+
+    private bool IsFullRoundToFinish(decimal distance)
+    {
+        var offset = this.OutputCalculation.Last().Item1 % 400;
+
+        if (distance - offset < 0)
+        {
+            return false;
+        }
+
+        return (distance - offset) % 400 == 0;
+    }
 }
